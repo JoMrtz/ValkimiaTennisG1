@@ -1,6 +1,7 @@
 ﻿using System.Reflection.Emit;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using static ValkimiaTennisG1.Models.Entities.Player;
 
 namespace ValkimiaTennisG1.Repository
 {
@@ -22,7 +23,7 @@ namespace ValkimiaTennisG1.Repository
 
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-            //builder.ApplyConfiguration(new AlumnoConfig());
+            builder.ApplyConfiguration(new PlayerConfig());
 
             //builder.ApplyConfiguration(new AulaConfig());
 

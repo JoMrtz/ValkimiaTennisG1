@@ -1,4 +1,6 @@
 
+using ValkimiaTennisG1.Configuration;
+
 namespace ValkimiaTennisG1
 {
     public class Program
@@ -13,6 +15,10 @@ namespace ValkimiaTennisG1
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            //PROBANDO PlayerExtension
+            builder.Services.AddTennisDbConfiguration();
+            //FIN DE PRUEBA
 
             var app = builder.Build();
 
