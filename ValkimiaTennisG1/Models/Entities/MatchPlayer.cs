@@ -2,5 +2,6 @@
 {
     public class MatchPlayer
     {
+        public bool Winner { get; set; }
     }
 }
