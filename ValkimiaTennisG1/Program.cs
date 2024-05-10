@@ -1,5 +1,7 @@
 
 using ValkimiaTennisG1.Configuration;
+using ValkimiaTennisG1.Services;
+using ValkimiaTennisG1.Services.Interfaces;
 
 namespace ValkimiaTennisG1
 {
@@ -16,10 +18,15 @@ namespace ValkimiaTennisG1
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            //PROBANDO PlayerExtension
+        
             builder.Services.AddTennisDbConfiguration();
-            //FIN DE PRUEBA
-
+  
+            builder.Services.AddScoped<IPlayerService, PlayerService>();
+           
+            
+            
+            
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

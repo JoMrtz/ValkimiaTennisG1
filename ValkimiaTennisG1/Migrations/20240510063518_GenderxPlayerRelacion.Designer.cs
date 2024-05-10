@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ValkimiaTennisG1.Repository;
 
@@ -11,9 +12,11 @@ using ValkimiaTennisG1.Repository;
 namespace ValkimiaTennisG1.Migrations
 {
     [DbContext(typeof(TennisContext))]
-    partial class TennisContextModelSnapshot : ModelSnapshot
+    [Migration("20240510063518_GenderxPlayerRelacion")]
+    partial class GenderxPlayerRelacion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,16 +102,19 @@ namespace ValkimiaTennisG1.Migrations
                         .HasColumnName("Name");
 
                     b.Property<int?>("ReactionTime")
+                        .IsRequired()
                         .HasMaxLength(2)
                         .HasColumnType("int")
                         .HasColumnName("ReactionTime");
 
                     b.Property<int?>("Speed")
+                        .IsRequired()
                         .HasMaxLength(2)
                         .HasColumnType("int")
                         .HasColumnName("Speed");
 
                     b.Property<int?>("Strength")
+                        .IsRequired()
                         .HasMaxLength(2)
                         .HasColumnType("int")
                         .HasColumnName("Strength");
