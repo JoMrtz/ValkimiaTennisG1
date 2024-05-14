@@ -31,11 +31,13 @@ namespace ValkimiaTennisG1.Controllers
         [HttpPost("GeneratePlayer")]
         public async Task<IActionResult> PostPlayer([FromBody] PlayerRequest player) {
 
-            var response = await _playerService.CreatePlayer(player);
-            return Ok(response);
+            await _playerService.CreatePlayer(player);
+            
+            return Created("creado", player);
    
 
         }
+       
 
     }
 }

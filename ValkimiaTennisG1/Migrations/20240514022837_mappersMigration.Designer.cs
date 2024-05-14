@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ValkimiaTennisG1.Repository;
 
@@ -11,9 +12,11 @@ using ValkimiaTennisG1.Repository;
 namespace ValkimiaTennisG1.Migrations
 {
     [DbContext(typeof(TennisContext))]
-    partial class TennisContextModelSnapshot : ModelSnapshot
+    [Migration("20240514022837_mappersMigration")]
+    partial class mappersMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

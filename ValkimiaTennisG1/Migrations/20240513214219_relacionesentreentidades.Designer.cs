@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ValkimiaTennisG1.Repository;
 
@@ -11,9 +12,11 @@ using ValkimiaTennisG1.Repository;
 namespace ValkimiaTennisG1.Migrations
 {
     [DbContext(typeof(TennisContext))]
-    partial class TennisContextModelSnapshot : ModelSnapshot
+    [Migration("20240513214219_relacionesentreentidades")]
+    partial class relacionesentreentidades
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,7 +106,7 @@ namespace ValkimiaTennisG1.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Ability")
-                        .HasMaxLength(3)
+                        .HasMaxLength(2)
                         .HasColumnType("int")
                         .HasColumnName("Ability");
 
@@ -117,17 +120,17 @@ namespace ValkimiaTennisG1.Migrations
                         .HasColumnName("Name");
 
                     b.Property<int?>("ReactionTime")
-                        .HasMaxLength(3)
+                        .HasMaxLength(2)
                         .HasColumnType("int")
                         .HasColumnName("ReactionTime");
 
                     b.Property<int?>("Speed")
-                        .HasMaxLength(3)
+                        .HasMaxLength(2)
                         .HasColumnType("int")
                         .HasColumnName("Speed");
 
                     b.Property<int?>("Strength")
-                        .HasMaxLength(3)
+                        .HasMaxLength(2)
                         .HasColumnType("int")
                         .HasColumnName("Strength");
 

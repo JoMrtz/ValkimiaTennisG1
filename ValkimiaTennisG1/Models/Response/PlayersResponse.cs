@@ -9,7 +9,7 @@ namespace ValkimiaTennisG1.Models.Response
 
         public int Ability { get; set; }
 
-        public int Gender { get; set; }
+        public GenderType Gender { get; set; }
 
     }
 }

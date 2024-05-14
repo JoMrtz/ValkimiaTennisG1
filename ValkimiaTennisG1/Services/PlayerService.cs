@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Numerics;
+using ValkimiaTennisG1.Mappers.Players;
 using ValkimiaTennisG1.Models.Entities;
 using ValkimiaTennisG1.Models.Request;
 using ValkimiaTennisG1.Models.Response;
@@ -17,57 +19,37 @@ namespace ValkimiaTennisG1.Services
             _context = context;
         }
 
-        public async Task<Player> CreatePlayer(PlayerRequest player)
+        public async Task<Player> CreatePlayer(PlayerRequest newPlayer)
         {
-
-            if (player.ReactionTime == null)
+            var playerGender = await _context.Gender.FirstOrDefaultAsync(g => g.Id == newPlayer.GenderId) ?? throw new Exception("El genero no existe");
+          
+           if (playerGender.GenderType == Enums.GenderType.Man)
             {
-                Player playerM = new Player()
-                {
-                    Id = 0,
-                    GenderId = 1,
-                    Name = player.Name,
-                    Ability = player.Ability,
-                    Strength = player.Strength,
-                    Speed = player.Speed,
-                    ReactionTime = null
-
-                };
-                await _context.AddAsync(playerM);
+                var player = newPlayer.ToPlayerMan();
+                await _context.AddAsync(player);
                 await _context.SaveChangesAsync();
-                return playerM;
+                return player;
             }
-            else
+           else if(playerGender.GenderType == Enums.GenderType.Woman)
             {
-                Player playerW = new Player()
-                {
-                    Id = 0,
-                    GenderId = 2,
-                    Name = player.Name,
-                    Ability = player.Ability,
-                    Strength = null,
-                    Speed = null,
-                    ReactionTime = player.ReactionTime
-
-                };
-                await _context.AddAsync(playerW);
+                var player = newPlayer.ToPlayerWoman();
+                await _context.AddAsync(player);
                 await _context.SaveChangesAsync();
-                return playerW;
-
+                return player;
             }
+
+            throw new Exception("Hubo un problema al generar el Jugador");
+
         }
+
         public async Task<IEnumerable<PlayersResponse>> GetPlayers()
         {
             var result = await _context.Player.ToListAsync();
-            
-            var players = result.Select(x => new PlayersResponse
-            {
-      
-                Name = x.Name,
-                Ability = x.Ability,
-                Gender = x.GenderId,
-            });
-            return players;
+                
+             var mappedsult = result.Select(x => x.ToPlayersResponse());
+
+
+            return mappedsult;
         }
     }
 }

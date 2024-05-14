@@ -1,12 +1,9 @@
 ﻿using System.Reflection.Emit;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using static ValkimiaTennisG1.Models.Entities.Player;
 using ValkimiaTennisG1.Models.Entities;
 using ValkimiaTennisG1.Enums;
-using static ValkimiaTennisG1.Models.Entities.Match;
-using static ValkimiaTennisG1.Models.Entities.Gender;
-using static ValkimiaTennisG1.Models.Entities.Tournament;
+
 
 namespace ValkimiaTennisG1.Repository
 {
@@ -17,7 +14,7 @@ namespace ValkimiaTennisG1.Repository
         public DbSet<Match> Match { get; set; }   
         public DbSet<Gender> Gender { get; set; }
         public DbSet<Tournament> Tournament { get; set; }
-        //public DbSet<MatchPlayer> MatchPlayer { get; set; }
+        public DbSet<MatchPlayer> MatchPlayer { get; set; }
 
 
         public TennisContext(DbContextOptions options) : base(options)

@@ -10,7 +10,7 @@ namespace ValkimiaTennisG1.Models.Entities
         public string Location { get; set; }
         public string CourtType { get; set; }
         public int Winner { get; set; }
-        public IEnumerable<Match> Matches { get; set; }
+        public ICollection<Match> Matches { get; set; }
 
         public class TournamentConfig : IEntityTypeConfiguration<Tournament>
         {

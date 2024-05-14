@@ -14,6 +14,7 @@ namespace ValkimiaTennisG1.Models.Entities
         public int? ReactionTime { get; set; }
         public int GenderId { get; set; }
         public virtual Gender Gender { get; set; }
+        public ICollection<MatchPlayer> MatchPlayers { get; set; }
 
         public class PlayerConfig : IEntityTypeConfiguration<Player>
         { 
@@ -23,12 +24,17 @@ namespace ValkimiaTennisG1.Models.Entities
                 builder.HasKey(x => x.Id);
                 builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd().IsRequired();
                 builder.Property(x => x.Name).HasColumnName("Name").HasMaxLength(50).IsRequired();
-                builder.Property(x => x.Ability).HasColumnName("Ability").HasMaxLength(2).IsRequired();
-                builder.Property(x => x.Strength).HasColumnName("Strength").HasMaxLength(2);
-                builder.Property(x => x.Speed).HasColumnName("Speed").HasMaxLength(2);
-                builder.Property(x => x.ReactionTime).HasColumnName("ReactionTime").HasMaxLength(2);
+                builder.Property(x => x.Ability).HasColumnName("Ability").HasMaxLength(3).IsRequired();
+                builder.Property(x => x.Strength).HasColumnName("Strength").HasMaxLength(3).IsRequired(false);
+                builder.Property(x => x.Speed).HasColumnName("Speed").HasMaxLength(3).IsRequired(false);
+                builder.Property(x => x.ReactionTime).HasColumnName("ReactionTime").HasMaxLength(3).IsRequired(false);
 
+
+
+                builder.HasMany(p => p.MatchPlayers).WithOne(mp => mp.Player).HasForeignKey(mp => mp.PlayerId);
                 builder.HasOne(p => p.Gender).WithMany(g => g.Players).HasForeignKey(p =>p.GenderId);
+                
+
             }
         }
     }

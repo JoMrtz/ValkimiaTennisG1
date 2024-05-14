@@ -14,5 +14,7 @@ namespace ValkimiaTennisG1.Models.Request
         public int? Speed { get; set; }
        
         public int? ReactionTime { get; set; }
+
+        public int GenderId { get; set; }
     }
 }
