@@ -5,5 +5,6 @@ namespace ValkimiaTennisG1.Services.Interfaces
     public interface ITournamentService
     {
         Task<Tournament> CrearTournament();
+        Task<Player> GenerateTournamentWinner();
     }
 }

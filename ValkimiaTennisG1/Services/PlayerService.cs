@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Numerics;
+using ValkimiaTennisG1.Excepcion;
 using ValkimiaTennisG1.Mappers.Players;
 using ValkimiaTennisG1.Models.Entities;
 using ValkimiaTennisG1.Models.Request;
@@ -21,8 +22,8 @@ namespace ValkimiaTennisG1.Services
 
         public async Task<Player> CreatePlayer(PlayerRequest newPlayer)
         {
-            var playerGender = await _context.Gender.FirstOrDefaultAsync(g => g.Id == newPlayer.GenderId) ?? throw new Exception("El genero no existe");
-          
+            var playerGender = await _context.Gender.FirstOrDefaultAsync(g => g.Id == newPlayer.GenderId) ?? throw new BadRequestException("error ingresando el genero", "el genero no existe");
+           
            if (playerGender.GenderType == Enums.GenderType.Man)
             {
                 var player = newPlayer.ToPlayerMan();

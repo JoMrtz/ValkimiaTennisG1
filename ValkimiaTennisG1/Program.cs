@@ -1,5 +1,8 @@
 
 using ValkimiaTennisG1.Configuration;
+using ValkimiaTennisG1.Middlewares;
+using ValkimiaTennisG1.Middlewares.MiddlewareService;
+using ValkimiaTennisG1.Middlewares.MiddlewareService.Interfaces;
 using ValkimiaTennisG1.Services;
 using ValkimiaTennisG1.Services.Interfaces;
 
@@ -22,11 +25,11 @@ namespace ValkimiaTennisG1
             builder.Services.AddTennisDbConfiguration();
   
             builder.Services.AddScoped<IPlayerService, PlayerService>();
-           
-            
-            
-            
-            
+            builder.Services.AddScoped<IExceptionService, ExceptionService>();
+
+
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -36,11 +39,10 @@ namespace ValkimiaTennisG1
                 app.UseSwaggerUI();
             }
 
+            app.UseMiddleware<CustomMiddleware>();
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
-
             app.MapControllers();
 
             app.Run();

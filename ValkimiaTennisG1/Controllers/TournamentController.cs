@@ -7,8 +7,6 @@ namespace ValkimiaTennisG1.Controllers
     [ApiController]
     public class TournamentController : ControllerBase
     {
-        
-
 
     }
 }
