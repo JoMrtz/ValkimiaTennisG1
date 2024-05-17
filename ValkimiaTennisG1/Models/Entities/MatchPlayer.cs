@@ -7,12 +7,13 @@ namespace ValkimiaTennisG1.Models.Entities
     {
 
         public int PlayerId { get; set; }
-        public Player Player { get; set; }
+        
 
         public int MatchId { get; set; }
-        public Match Match { get; set; }
-
+        
         public bool Winner { get; set; }
+        public Player Player { get; set; }
+        public Match Match { get; set; }
     }
     public class MatchPlayerConfig : IEntityTypeConfiguration<MatchPlayer>
     {

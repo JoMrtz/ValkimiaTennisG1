@@ -13,32 +13,24 @@ namespace ValkimiaTennisG1.Controllers
     public class TournamentController : ControllerBase
     {
         private readonly ITournamentService _tournamentService;
-        private readonly TennisContext _context;
+
         public TournamentController(ITournamentService tournamentService)
         {
             _tournamentService = tournamentService;
         }
 
-
-
-        //[HttpGet("")]
-        //public async Task<ActionResult> GetPlayers()
-        //{
-        //    var players = await _playerService.GetPlayers();
-        //    return Ok(players);
-        //}
-
-
-        [HttpPost("GenerateTournament")]
-        public async Task<IActionResult> PostTournament([FromBody] TournamentRequest tournament)
+        [HttpPost]
+        public async Task<ActionResult<Tournament>> CreateTournament([FromBody] TournamentRequest request)
         {
-
-            await _tournamentService.CreateTournament(tournament);
-
-            return Created("Torneo creado", tournament);
-
-
+            var tournament = await _tournamentService.CreateTournamentAsync(request);
+            return CreatedAtAction(nameof(CreateTournament), new { id = tournament.Id }, tournament);
         }
 
+        [HttpPost("generate-winner")]
+        public async Task<ActionResult<Player>> GenerateTournamentWinner([FromBody] TournamentPlayerList tournamentPlayerList)
+        {
+            var winner = await _tournamentService.GenerateTournamentWinnerAsync(tournamentPlayerList);
+            return Ok(winner);
+        }
     }
 }

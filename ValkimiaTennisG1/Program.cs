@@ -27,7 +27,7 @@ namespace ValkimiaTennisG1
             builder.Services.AddScoped<IExceptionService, ExceptionService>();
 
             builder.Services.AddScoped<ITournamentService, TournamentService>();
-
+            builder.Services.AddScoped<IMatchService, MatchService>();
 
 
 

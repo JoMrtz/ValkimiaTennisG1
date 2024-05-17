@@ -9,7 +9,7 @@ namespace ValkimiaTennisG1.Models.Entities
         public string Name { get; set; }
         public string Location { get; set; }
         public string CourtType { get; set; }
-        public int Winner { get; set; }
+        public int? Winner { get; set; }
         public ICollection<Match> Matches { get; set; }
 
         public class TournamentConfig : IEntityTypeConfiguration<Tournament>
@@ -22,7 +22,7 @@ namespace ValkimiaTennisG1.Models.Entities
                 builder.Property(x => x.Name).HasColumnName("Name").HasMaxLength(50).IsRequired();
                 builder.Property(x => x.Location).HasColumnName("Location").HasMaxLength(50).IsRequired();
                 builder.Property(x => x.CourtType).HasColumnName("CourtType").HasMaxLength(20).IsRequired();
-                builder.Property(x => x.Winner).HasColumnName("Winner").IsRequired();
+                builder.Property(x => x.Winner).HasColumnName("Winner").IsRequired(false);
             }
         }
 
