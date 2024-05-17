@@ -8,7 +8,7 @@ namespace ValkimiaTennisG1.Services.Interfaces
     {
         Task<Tournament> CreateTournamentAsync(TournamentRequest request);
         //  Task<IEnumerable<TournamentResponse>> GetTournaments();
-        Task<Player> GenerateTournamentWinnerAsync(TournamentPlayerList playersList);
+        Task<PlayerWinnerResponse> GenerateTournamentWinnerAsync(TournamentPlayerList playersList);
 
     }
 }

@@ -5,6 +5,7 @@ using ValkimiaTennisG1.Models.Request;
 using ValkimiaTennisG1.Repository;
 using ValkimiaTennisG1.Services.Interfaces;
 using ValkimiaTennisG1.Services;
+using ValkimiaTennisG1.Models.Response;
 
 namespace ValkimiaTennisG1.Controllers
 {
@@ -30,7 +31,8 @@ namespace ValkimiaTennisG1.Controllers
         public async Task<ActionResult<Player>> GenerateTournamentWinner([FromBody] TournamentPlayerList tournamentPlayerList)
         {
             var winner = await _tournamentService.GenerateTournamentWinnerAsync(tournamentPlayerList);
-            return Ok(winner);
+            var winnerResponse = new PlayerWinnerResponse { Id = winner.Id, Name = winner.Name };
+            return Ok(winnerResponse);
         }
     }
 }

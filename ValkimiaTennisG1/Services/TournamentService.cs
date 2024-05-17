@@ -39,7 +39,7 @@ namespace ValkimiaTennisG1.Services
         }
 
 
-        public async Task<Player> GenerateTournamentWinnerAsync(TournamentPlayerList tournamentPlayerList)
+        public async Task<PlayerWinnerResponse> GenerateTournamentWinnerAsync(TournamentPlayerList tournamentPlayerList)
         {
             var tournament = await _context.Tournament
                 .Include(t => t.Matches)
@@ -90,8 +90,16 @@ namespace ValkimiaTennisG1.Services
             _context.Tournament.Update(tournament);
             await _context.SaveChangesAsync();
 
-            return finalWinner;
+            // Crear el objeto PlayerWinnerResponse con los datos del ganador
+            var winnerResponse = new PlayerWinnerResponse
+            {
+                Id = finalWinner.Id,
+                Name = finalWinner.Name
+            };
+
+            return winnerResponse;
         }
+
 
     }
 
