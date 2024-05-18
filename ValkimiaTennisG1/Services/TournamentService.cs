@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using ValkimiaTennisG1.Excepcion;
+using ValkimiaTennisG1.Mappers.Tournaments;
 using ValkimiaTennisG1.Models.Entities;
 using ValkimiaTennisG1.Models.Request;
 using ValkimiaTennisG1.Models.Response;
@@ -20,22 +21,27 @@ namespace ValkimiaTennisG1.Services
             _matchService = matchService;
         }
 
-        public async Task<Tournament> CreateTournamentAsync(TournamentRequest request)
+        public async Task<Tournament> CreateTournamentAsync(TournamentRequest newTournament)
         {
+
+            // Crear el torneo forma vieja
+            //var tournament = new Tournament
+            //{
+            //    Name = request.Name,
+            //    Location = request.Location,
+            //    CourtType = request.CourtType,
+            //    Matches = new List<Match>()
+            //};
+
             // Crear el torneo
-            var tournament = new Tournament
-            {
-                Name = request.Name,
-                Location = request.Location,
-                CourtType = request.CourtType,
-                Matches = new List<Match>()
-            };
+            var tournament = newTournament.ToTournament(); //Falta matches en el mapper?
 
-            // Añadir el torneo a la base de datos
-            await _context.Tournament.AddAsync(tournament);
+            // Añadir torneo a la base de datos
+            await _context.AddAsync(tournament);
             await _context.SaveChangesAsync();
-
             return tournament;
+
+            throw new Exception("Hubo un problema al generar el Torneo");
         }
 
 
@@ -89,6 +95,14 @@ namespace ValkimiaTennisG1.Services
             // Guardar el ganador del torneo en la base de datos
             _context.Tournament.Update(tournament);
             await _context.SaveChangesAsync();
+
+            // Crear el objeto PlayerWinnerResponse con los datos del ganador
+            //var winnerResponse = new PlayerWinnerResponse
+            //{
+            //    Id = finalWinner.Id,
+            //    Name = finalWinner.Name
+            //};
+            //return winnerResponse;
 
             // Crear el objeto PlayerWinnerResponse con los datos del ganador
             var winnerResponse = new PlayerWinnerResponse
