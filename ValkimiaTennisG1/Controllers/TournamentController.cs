@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ValkimiaTennisG1.Models.Entities;
-using ValkimiaTennisG1.Models.Request;
 using ValkimiaTennisG1.Repository;
 using ValkimiaTennisG1.Services.Interfaces;
 using ValkimiaTennisG1.Services;
-using ValkimiaTennisG1.Models.Response;
+using ValkimiaTennisG1.Models.Response.Tournament;
+using ValkimiaTennisG1.Models.Response.Player;
+using ValkimiaTennisG1.Models.Request.Tournament;
 
 namespace ValkimiaTennisG1.Controllers
 {
@@ -20,19 +21,36 @@ namespace ValkimiaTennisG1.Controllers
             _tournamentService = tournamentService;
         }
 
+        [Route("SimulateTournament")]
         [HttpPost]
-        public async Task<ActionResult<Tournament>> CreateTournament([FromBody] TournamentRequest request)
+        public async Task<ActionResult<PlayerWinnerResponse>> GenerateTournamentWinner([FromQuery] int genderId, [FromBody] TournamentRequest tournamentRequest)
         {
-            var tournament = await _tournamentService.CreateTournamentAsync(request);
-            return CreatedAtAction(nameof(CreateTournament), new { id = tournament.Id }, tournament);
-        }
-
-        [HttpPost("generate-winner")]
-        public async Task<ActionResult<Player>> GenerateTournamentWinner([FromBody] TournamentPlayerList tournamentPlayerList)
-        {
-            var winner = await _tournamentService.GenerateTournamentWinnerAsync(tournamentPlayerList);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var winner = await _tournamentService.GenerateTournamentWinnerAsync(tournamentRequest, genderId);
             var winnerResponse = new PlayerWinnerResponse { Id = winner.Id, Name = winner.Name };
             return Ok(winnerResponse);
         }
+
+        [Route("GetAllTournaments")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<AllTournamentsResponse>>> GetAllTournaments()
+        {
+            var tournaments = await _tournamentService.GetAllTournaments();
+            return Ok(tournaments);
+        }
+        [Route("GetOneTournament/{id}")]
+        [HttpGet]
+        public async Task<ActionResult<OneTournamentResponse>> GetOneTournament(int id)
+        { 
+            var tournament = await _tournamentService.GetOneTournamentAsync(id);
+            return Ok(tournament);
+        }
+          
+        
+              
+            
+      
+
     }
 }

@@ -1,6 +1,6 @@
 ﻿using ValkimiaTennisG1.Models.Entities;
-using ValkimiaTennisG1.Models.Request;
-using ValkimiaTennisG1.Models.Response;
+using ValkimiaTennisG1.Models.Request.Player;
+using ValkimiaTennisG1.Models.Response.Player;
 
 namespace ValkimiaTennisG1.Services.Interfaces
 {
@@ -9,5 +9,7 @@ namespace ValkimiaTennisG1.Services.Interfaces
         Task<Player> CreatePlayer(PlayerRequest player);
 
         Task<IEnumerable<PlayersResponse>> GetPlayers();
+        public int CalculatePlayerScore(Player player);
+        Task<bool> DeletePlayerAsync(int id);
     }
 }

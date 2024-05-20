@@ -1,4 +1,4 @@
-﻿namespace ValkimiaTennisG1.Models.Response
+﻿namespace ValkimiaTennisG1.Models.Response.Player
 {
     public class PlayerWinnerResponse
     {

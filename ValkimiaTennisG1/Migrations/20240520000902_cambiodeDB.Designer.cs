@@ -12,8 +12,8 @@ using ValkimiaTennisG1.Repository;
 namespace ValkimiaTennisG1.Migrations
 {
     [DbContext(typeof(TennisContext))]
-    [Migration("20240510021005_Migracion1")]
-    partial class Migracion1
+    [Migration("20240520000902_cambiodeDB")]
+    partial class cambiodeDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,36 @@ namespace ValkimiaTennisG1.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("ValkimiaTennisG1.Models.Entities.Gender", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("GenderType")
+                        .HasColumnType("int")
+                        .HasColumnName("GenderType");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Gender", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            GenderType = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            GenderType = 1
+                        });
+                });
 
             modelBuilder.Entity("ValkimiaTennisG1.Models.Entities.Match", b =>
                 {
@@ -38,7 +68,7 @@ namespace ValkimiaTennisG1.Migrations
                         .HasColumnType("date")
                         .HasColumnName("Date");
 
-                    b.Property<int?>("TournamentId")
+                    b.Property<int>("TournamentId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -46,6 +76,24 @@ namespace ValkimiaTennisG1.Migrations
                     b.HasIndex("TournamentId");
 
                     b.ToTable("Match", (string)null);
+                });
+
+            modelBuilder.Entity("ValkimiaTennisG1.Models.Entities.MatchPlayer", b =>
+                {
+                    b.Property<int>("MatchId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlayerId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Winner")
+                        .HasColumnType("bit");
+
+                    b.HasKey("MatchId", "PlayerId");
+
+                    b.HasIndex("PlayerId");
+
+                    b.ToTable("MatchPlayer", (string)null);
                 });
 
             modelBuilder.Entity("ValkimiaTennisG1.Models.Entities.Player", b =>
@@ -58,9 +106,12 @@ namespace ValkimiaTennisG1.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Ability")
-                        .HasMaxLength(2)
+                        .HasMaxLength(3)
                         .HasColumnType("int")
                         .HasColumnName("Ability");
+
+                    b.Property<int>("GenderId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -68,22 +119,24 @@ namespace ValkimiaTennisG1.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("Name");
 
-                    b.Property<int>("ReactionTime")
-                        .HasMaxLength(2)
+                    b.Property<int?>("ReactionTime")
+                        .HasMaxLength(3)
                         .HasColumnType("int")
                         .HasColumnName("ReactionTime");
 
-                    b.Property<int>("Speed")
-                        .HasMaxLength(2)
+                    b.Property<int?>("Speed")
+                        .HasMaxLength(3)
                         .HasColumnType("int")
                         .HasColumnName("Speed");
 
-                    b.Property<int>("Strength")
-                        .HasMaxLength(2)
+                    b.Property<int?>("Strength")
+                        .HasMaxLength(3)
                         .HasColumnType("int")
                         .HasColumnName("Strength");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GenderId");
 
                     b.ToTable("Player", (string)null);
                 });
@@ -115,7 +168,7 @@ namespace ValkimiaTennisG1.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("Name");
 
-                    b.Property<int>("Winner")
+                    b.Property<int?>("Winner")
                         .HasColumnType("int")
                         .HasColumnName("Winner");
 
@@ -126,9 +179,58 @@ namespace ValkimiaTennisG1.Migrations
 
             modelBuilder.Entity("ValkimiaTennisG1.Models.Entities.Match", b =>
                 {
-                    b.HasOne("ValkimiaTennisG1.Models.Entities.Tournament", null)
+                    b.HasOne("ValkimiaTennisG1.Models.Entities.Tournament", "Tournament")
                         .WithMany("Matches")
-                        .HasForeignKey("TournamentId");
+                        .HasForeignKey("TournamentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tournament");
+                });
+
+            modelBuilder.Entity("ValkimiaTennisG1.Models.Entities.MatchPlayer", b =>
+                {
+                    b.HasOne("ValkimiaTennisG1.Models.Entities.Match", "Match")
+                        .WithMany("MatchPlayers")
+                        .HasForeignKey("MatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ValkimiaTennisG1.Models.Entities.Player", "Player")
+                        .WithMany("MatchPlayers")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Match");
+
+                    b.Navigation("Player");
+                });
+
+            modelBuilder.Entity("ValkimiaTennisG1.Models.Entities.Player", b =>
+                {
+                    b.HasOne("ValkimiaTennisG1.Models.Entities.Gender", "Gender")
+                        .WithMany("Players")
+                        .HasForeignKey("GenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Gender");
+                });
+
+            modelBuilder.Entity("ValkimiaTennisG1.Models.Entities.Gender", b =>
+                {
+                    b.Navigation("Players");
+                });
+
+            modelBuilder.Entity("ValkimiaTennisG1.Models.Entities.Match", b =>
+                {
+                    b.Navigation("MatchPlayers");
+                });
+
+            modelBuilder.Entity("ValkimiaTennisG1.Models.Entities.Player", b =>
+                {
+                    b.Navigation("MatchPlayers");
                 });
 
             modelBuilder.Entity("ValkimiaTennisG1.Models.Entities.Tournament", b =>

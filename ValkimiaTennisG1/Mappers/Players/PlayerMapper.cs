@@ -1,8 +1,8 @@
 ﻿
 using System.Net.NetworkInformation;
 using ValkimiaTennisG1.Models.Entities;
-using ValkimiaTennisG1.Models.Request;
-using ValkimiaTennisG1.Models.Response;
+using ValkimiaTennisG1.Models.Request.Player;
+using ValkimiaTennisG1.Models.Response.Player;
 
 namespace ValkimiaTennisG1.Mappers.Players
 {
@@ -41,8 +41,8 @@ namespace ValkimiaTennisG1.Mappers.Players
 
         }
 
-        public static PlayersResponse ToPlayersResponse(this Player player)
-        {
+           public static PlayersResponse ToPlayersResponse(this Player player) { 
+    
             return new PlayersResponse
             {
                 Name = player.Name,

@@ -1,86 +1,52 @@
-﻿using ValkimiaTennisG1.Models.Entities;
+﻿using ValkimiaTennisG1.Mappers.MatchPlayers;
+using ValkimiaTennisG1.Mappers.Matchs;
+using ValkimiaTennisG1.Models.Entities;
 using ValkimiaTennisG1.Repository;
 using ValkimiaTennisG1.Services.Interfaces;
 
 namespace ValkimiaTennisG1.Services
 {
-    public class MatchService : IMatchService
-    {
-        private readonly TennisContext _context;
-
-        public MatchService(TennisContext context)
+        public class MatchService : IMatchService
         {
-            _context = context;
+            private readonly IPlayerService _playerService;
+            private readonly TennisContext _context;
+            public MatchService(TennisContext context, IPlayerService playerService)
+            {
+                _context = context;
+                _playerService = playerService;
         }
 
-        public async Task<Match> CreateMatchAsync(Player player1, Player player2, int tournamentId)
-        {
-            // Crear un nuevo match
-            Match match = new Match
+            public async Task<Match> CreateMatchAsync(Player player1, Player player2, int tournamentId)
             {
-                Date = DateOnly.FromDateTime(DateTime.Now),
-                TournamentId = tournamentId
-            };
+                var match = MatchMapper.ToMatch(tournamentId);
 
+                // Calcular el puntaje de cada jugador con el factor de suerte
+                var player1Score = _playerService.CalculatePlayerScore(player1) + GetLuckFactor();
+                var player2Score = _playerService.CalculatePlayerScore(player2) + GetLuckFactor();
 
+                // Decidir el ganador
+                var player1IsWinner = player1Score > player2Score;
 
-            // Determinar el ganador
-            Player winner = DetermineWinner(player1, player2);
+                // Usar el mapper para crear los registros de MatchPlayer
+                match.MatchPlayers.Add(MatchPlayerMapper.ToMatchPlayer(player1, match.Id, player1IsWinner));
+                match.MatchPlayers.Add(MatchPlayerMapper.ToMatchPlayer(player2, match.Id, !player1IsWinner));
 
+                await _context.Match.AddAsync(match);
+                await _context.SaveChangesAsync();
 
-
-
-            // Actualizar los jugadores del match
-            var matchPlayers = new List<MatchPlayer>
-        {
-            new MatchPlayer
-            {
-                Match = match,
-                Player = player1,
-                Winner = player1 == winner
-            },
-            new MatchPlayer
-            {
-                Match = match,
-                Player = player2,
-                Winner = player2 == winner
-            }
-        };
-
-            match.MatchPlayers = matchPlayers;
-
-            // Guardar el match en la base de datos
-            await _context.Match.AddAsync(match);
-            await _context.SaveChangesAsync();
-
-            return match;
-        }
-
-        public Player DetermineWinner(Player player1, Player player2)
-        {
-            int player1Score = CalculatePlayerScore(player1);
-            int player2Score = CalculatePlayerScore(player2);
-
-            return player1Score > player2Score ? player1 : player2;
-        }
-
-        private int CalculatePlayerScore(Player player)
-        {
-            int baseScore = player.Ability;
-            int specialScore = 0;
-
-            if (player.GenderId == 1) // Masculino
-            {
-                specialScore = (player.Strength ?? 0) + (player.Speed ?? 0);
-            }
-            else if (player.GenderId == 2) // Femenino
-            {
-                specialScore = player.ReactionTime ?? 0;
+                return match;
             }
 
-            return baseScore + specialScore;
+           
+
+            private int GetLuckFactor()
+            {
+                Random random = new Random();
+                return random.Next(0, 11); // Valor aleatorio entre 0 y 10
+            }
         }
+
     }
 
 
-}
+

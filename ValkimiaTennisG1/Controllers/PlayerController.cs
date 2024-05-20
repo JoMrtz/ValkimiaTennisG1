@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ValkimiaTennisG1.Models.Entities;
-using ValkimiaTennisG1.Models.Request;
+using ValkimiaTennisG1.Models.Request.Player;
 using ValkimiaTennisG1.Repository;
 using ValkimiaTennisG1.Services;
 using ValkimiaTennisG1.Services.Interfaces;
@@ -24,20 +24,30 @@ namespace ValkimiaTennisG1.Controllers
         [HttpGet("")]
         public async Task<ActionResult> GetPlayers()
         {
-           var players = await _playerService.GetPlayers();
+            var players = await _playerService.GetPlayers();
             return Ok(players);
         }
 
         [HttpPost("GeneratePlayer")]
-        public async Task<IActionResult> PostPlayer([FromBody] PlayerRequest player) {
+        public async Task<IActionResult> PostPlayer([FromBody] PlayerRequest player)
+        {
 
             await _playerService.CreatePlayer(player);
-            
-            return Created("creado", player);
-   
 
+            return Created("creado", player);
         }
-       
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeletePlayer(int id)
+        {
+            var result = await _playerService.DeletePlayerAsync(id);
+            if (!result)
+            {
+                return NotFound(new { message = "Jugador no encontrado." });
+            }
+
+            return NoContent();
+        }
 
     }
 }
